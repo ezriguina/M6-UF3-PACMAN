@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Data - Pacman Game</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        :root {
+            --primary-color: #ffcc00;
+            --secondary-color: #1e1e1e;
+            --background-color: #121212;
+            --text-color: #ffffff;
+            --accent-color: #ff4444;
+            --input-bg: #2a2a2a;
+            --input-border: #444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--secondary-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 0.4rem;
+            font-size: 0.95rem;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        select {
+            padding: 0.6rem;
+            border: 1px solid var(--input-border);
+            border-radius: 5px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+
+        button {
+            padding: 0.8rem;
+            margin-top: 1rem;
+            background-color: var(--primary-color);
+            color: #000;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #e6b800;
+        }
+
+        @media (max-width: 600px) {
+            main {
+                padding: 1.2rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            button {
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Temas adicionales */
+        body.theme-light {
+            --primary-color: #0055ff;
+            --secondary-color: #ffffff;
+            --background-color: #f0f0f0;
+            --text-color: #000000;
+            --accent-color: #0077ff;
+            --input-bg: #ffffff;
+            --input-border: #cccccc;
+        }
+
+        body.theme-dark {
+            --primary-color: #ffcc00;
+            --secondary-color: #1e1e1e;
+            --background-color: #121212;
+            --text-color: #ffffff;
+            --accent-color: #ff4444;
+            --input-bg: #2a2a2a;
+            --input-border: #444;
+        }
+
+        body.theme-classic {
+            --primary-color: #ffff00;
+            --secondary-color: #000000;
+            --background-color: #000000;
+            --text-color: #ffffff;
+            --accent-color: #00ffff;
+            --input-bg: #111111;
+            --input-border: #888888;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <!-- Mismo header que game.html -->
+    </header>
+
+    <main>
+        <h1>Les meves dades</h1>
+        <form id="profile-form">
+            <div class="form-group">
+                <label for="name">Nom:</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Cognom:</label>
+                <input type="text" id="lastName" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="birthDate">Data de naixement:</label>
+                <input type="date" id="birthDate" required>
+            </div>
+            <div class="form-group">
+                <label for="theme">Tema:</label>
+                <select id="theme">
+                    <option value="light">Clar</option>
+                    <option value="dark">Fosc</option>
+                    <option value="classic">Clàssic Pacman</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="music">Música:</label>
+                <select id="music">
+                    <option value="on">Activada</option>
+                    <option value="off">Desactivada</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="difficulty">Dificultat:</label>
+                <select id="difficulty">
+                    <option value="easy">Fàcil</option>
+                    <option value="medium">Mitjà</option>
+                    <option value="hard">Difícil</option>
+                </select>
+            </div>
+            <button type="submit">Guardar canvis</button>
+        </form>
+    </main>
+
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = JSON.parse(localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser'));
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Función para aplicar tema
+            function applyTheme(theme) {
+                document.body.classList.remove('theme-light', 'theme-dark', 'theme-classic');
+                document.body.classList.add(`theme-${theme}`);
+            }
+
+            // Rellenar formulario con datos del usuario
+            document.getElementById('name').value = user.name;
+            document.getElementById('lastName').value = user.lastName;
+            document.getElementById('email').value = user.email;
+            document.getElementById('birthDate').value = user.birthDate;
+
+            // Cargar preferencias
+            const preferences = JSON.parse(localStorage.getItem('preferences') || '{}');
+            if (preferences[user.id]) {
+                const pref = preferences[user.id];
+                document.getElementById('theme').value = pref.theme || 'classic';
+                document.getElementById('music').value = pref.music || 'on';
+                document.getElementById('difficulty').value = pref.difficulty || 'medium';
+
+                applyTheme(pref.theme || 'classic');
+            } else {
+                applyTheme('classic');
+            }
+
+            // Manejar envío del formulario
+            document.getElementById('profile-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const users = JSON.parse(localStorage.getItem('users'));
+                const userIndex = users.findIndex(u => u.id === user.id);
+
+                users[userIndex] = {
+                    ...users[userIndex],
+                    name: document.getElementById('name').value,
+                    lastName: document.getElementById('lastName').value,
+                    email: document.getElementById('email').value,
+                    birthDate: document.getElementById('birthDate').value
+                };
+
+                localStorage.setItem('users', JSON.stringify(users));
+
+                const newPreferences = JSON.parse(localStorage.getItem('preferences') || '{}');
+                newPreferences[user.id] = {
+                    theme: document.getElementById('theme').value,
+                    music: document.getElementById('music').value,
+                    difficulty: document.getElementById('difficulty').value
+                };
+
+                localStorage.setItem('preferences', JSON.stringify(newPreferences));
+                localStorage.setItem('currentUser', JSON.stringify(users[userIndex]));
+
+                applyTheme(document.getElementById('theme').value);
+
+                alert('Canvis guardats correctament');
+            });
+        });
+    </script>
+</body>
+</html>

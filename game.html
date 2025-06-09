@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacman Game</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<style>
+    /* styles.css */
+
+:root {
+    --primary-color: #ffcc00;
+    --background-color: #121212;
+    --text-color: #ffffff;
+    --accent-color: #ff4444;
+    --nav-bg: #1e1e1e;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background-color: var(--nav-bg);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    letter-spacing: 1px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: var(--text-color);
+    padding: 0.5rem 0.8rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+nav ul li a:hover,
+nav ul li a:focus {
+    background-color: var(--primary-color);
+    color: #000;
+    border-radius: 5px;
+}
+
+main {
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+#game-container {
+    width: 640px;
+    height: 480px;
+    background-color: #000;
+    border: 4px solid var(--primary-color);
+    box-shadow: 0 0 15px var(--primary-color);
+}
+
+.game-info {
+    background-color: var(--nav-bg);
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    display: flex;
+    gap: 2rem;
+    font-size: 1.2rem;
+    box-shadow: 0 0 10px rgba(255, 255, 0, 0.2);
+}
+
+.game-info p {
+    margin: 0;
+}
+
+@media (max-width: 700px) {
+    #game-container {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 4 / 3;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .game-info {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+</style>
+<body>
+    <header>
+        <div class="logo">Pacman Game</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="game.html">Start Game</a></li>
+                <li><a href="stats.html">My Stats</a></li>
+                <li><a href="profile.html">My Data</a></li>
+                <li><a href="ranking.html">Top Ranking</a></li>
+                <li><a href="help.html" id="help-link">Help</a></li>
+                <li><a href="login.html" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div id="game-container"></div>
+        <div class="game-info">
+            <p>Punts: <span id="score">0</span></p>
+            <p>Vides: <span id="lives">3</span></p>
+            <p>Nivell: <span id="level">1</span></p>
+        </div>
+    </main>
+
+    <script src="js/game.js"></script>
+    <script src="js/configGame.js"></script>
+    <script src="js/user.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

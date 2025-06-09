@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacman Game</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<style>
+    /* styles.css */
+
+:root {
+    --primary-color: #ffcc00;
+    --secondary-color: #1e1e1e;
+    --background-color: #121212;
+    --text-color: #ffffff;
+    --accent-color: #ff4444;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header + Nav */
+header {
+    background-color: var(--secondary-color);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: var(--text-color);
+    padding: 0.5rem 0.8rem;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+nav ul li a:hover,
+nav ul li a:focus {
+    background-color: var(--primary-color);
+    color: #000;
+}
+
+/* Hero section */
+.hero {
+    text-align: center;
+    padding: 5rem 2rem;
+    background: radial-gradient(circle at center, #222 0%, #111 100%);
+    box-shadow: inset 0 0 50px rgba(255, 204, 0, 0.1);
+    border-top: 4px solid var(--primary-color);
+}
+
+.hero h1 {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: #ccc;
+}
+
+/* Content sections */
+.content-section {
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.content-section h2 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+}
+
+.content-section p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+#game-features {
+    background-color: #1a1a1a;
+}
+
+#how-to-play {
+    background-color: #151515;
+}
+
+#ranking-info {
+    background-color: #1a1a1a;
+}
+
+/* Modal styles */
+.modal {
+    display: none; /* hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.8);
+}
+
+.modal-content {
+    background-color: var(--secondary-color);
+    margin: 10% auto;
+    padding: 2rem;
+    border: 2px solid var(--primary-color);
+    width: 80%;
+    max-width: 600px;
+    border-radius: 10px;
+    color: var(--text-color);
+    box-shadow: 0 0 15px var(--primary-color);
+}
+
+.modal-content h2 {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.close {
+    color: var(--primary-color);
+    float: right;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: var(--accent-color);
+}
+
+/* Responsive design */
+@media (max-width: 700px) {
+    nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .modal-content {
+        width: 90%;
+    }
+}
+
+</style>
+<body>
+    <header>
+        <div class="logo">Pacman Game</div>
+        <nav>
+            <ul>
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#game-features">Característiques</a></li>
+                <li><a href="#how-to-play">Com jugar</a></li>
+                <li><a href="#ranking-info">Ranking</a></li>
+                <li><a href="login.html" id="login-link">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="hero">
+            <h1>Benvingut al Pacman Game</h1>
+            <p>Un joc clàssic amb noves funcionalitats</p>
+        </section>
+
+        <section id="game-features" class="content-section">
+            <h2>Característiques del Joc</h2>
+            <p>Descobreix totes les novetats que hem afegit a aquesta versió millorada del clàssic Pacman:</p>
+            <ul>
+                <li>Gràfics actualitzats amb alta definició</li>
+                <li>Sistema de puntuació millorat</li>
+                <li>Nivells nous i exclusius</li>
+                <li>Mode multijugador en línia</li>
+                <li>Personalització del personatge</li>
+            </ul>
+        </section>
+
+        <section id="how-to-play" class="content-section">
+            <h2>Com jugar</h2>
+            <p>Aquestes són les instruccions bàsiques per jugar al nostre Pacman:</p>
+            <ol>
+                <li>Utilitza les tecles de fletxa per moure a Pacman pel laberint</li>
+                <li>Menja tots els punts per avançar al següent nivell</li>
+                <li>Evita els fantasmes, et poden fer perdre una vida</li>
+                <li>Menja les píndoles de poder per poder menjar als fantasmes</li>
+                <li>Acumula punts per pujar al ranking global</li>
+            </ol>
+        </section>
+
+        <section id="ranking-info" class="content-section">
+            <h2>Sistema de Ranking</h2>
+            <p>El nostre sistema de ranking et permet competir amb jugadors de tot el món:</p>
+            <ul>
+                <li>Punts basats en la teva actuació al joc</li>
+                <li>Classificació global i entre amics</li>
+                <li>Recompenses especials per als millors jugadors</li>
+                <li>Actualitzacions en temps real</li>
+                <li>Històric de partides</li>
+            </ul>
+        </section>
+    </main>
+
+    <div id="info-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Informació del Navegador</h2>
+            <p id="user-agent"></p>
+            <p id="app-version"></p>
+        </div>
+    </div>
+
+    <div id="credits-modal" class="modal">
+        <!-- Contenido de créditos -->
+    </div>
+
+    <div id="help-modal" class="modal">
+        <!-- Contenido de ayuda -->
+    </div>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Modal functionality
+        document.getElementById('info-link')?.addEventListener('click', function() {
+            document.getElementById('info-modal').style.display = 'block';
+            document.getElementById('user-agent').textContent = 'User Agent: ' + navigator.userAgent;
+            document.getElementById('app-version').textContent = 'App Version: 1.0.0';
+        });
+
+        document.querySelectorAll('.close').forEach(closeBtn => {
+            closeBtn.addEventListener('click', function() {
+                this.closest('.modal').style.display = 'none';
+            });
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

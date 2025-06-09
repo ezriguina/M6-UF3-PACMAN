@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Stats - Pacman Game</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<style>
+    /* styles.css - Estils per a la pàgina d'estadístiques */
+
+:root {
+    --primary-color: #ffcc00;
+    --background-color: #121212;
+    --text-color: #ffffff;
+    --table-header-bg: #1e1e1e;
+    --table-row-bg: #1a1a1a;
+    --border-color: #333;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    max-width: 800px;
+    margin: 3rem auto;
+    padding: 2rem;
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #00000060;
+}
+
+h1 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--table-row-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+thead {
+    background-color: var(--table-header-bg);
+}
+
+thead th {
+    padding: 1rem;
+    text-align: left;
+    color: var(--primary-color);
+    border-bottom: 1px solid var(--border-color);
+    font-size: 1.1rem;
+}
+
+tbody td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+tbody tr:hover {
+    background-color: #2a2a2a;
+    transition: background-color 0.2s ease-in-out;
+}
+
+@media (max-width: 600px) {
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    thead {
+        display: none;
+    }
+
+    tbody td {
+        padding: 0.8rem;
+        position: relative;
+        padding-left: 50%;
+        text-align: left;
+    }
+
+    tbody td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 1rem;
+        top: 0.8rem;
+        font-weight: bold;
+        color: var(--primary-color);
+    }
+
+    tbody tr {
+        margin-bottom: 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+    }
+}
+
+</style>
+<body>
+    <header>
+        <!-- Mismo header que game.html -->
+    </header>
+
+    <main>
+        <h1>Les meves estadístiques</h1>
+        <table id="stats-table">
+            <thead>
+                <tr>
+                    <th>Partides jugades</th>
+                    <th>Partides guanyades</th>
+                    <th>Partides perdudes</th>
+                    <th>Punts totals</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Datos se llenarán con JavaScript -->
+            </tbody>
+        </table>
+    </main>
+
+    <script src="js/auth.js"></script>
+    <script src="js/user.js"></script>
+    <script src="js/game.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = JSON.parse(localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser'));
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            const stats = JSON.parse(localStorage.getItem('stats') || '{}');
+            const userStats = stats[user.id] || {
+                gamesPlayed: 0,
+                gamesWon: 0,
+                gamesLost: 0,
+                totalPoints: 0
+            };
+            
+            const tableBody = document.querySelector('#stats-table tbody');
+            tableBody.innerHTML = `
+                <tr>
+                    <td>${userStats.gamesPlayed}</td>
+                    <td>${userStats.gamesWon}</td>
+                    <td>${userStats.gamesLost}</td>
+                    <td>${userStats.totalPoints}</td>
+                </tr>
+            `;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Ranking - Pacman Game</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<style>
+    /* styles.css */
+
+:root {
+    --primary-color: #ffcc00;
+    --background-color: #121212;
+    --text-color: #ffffff;
+    --table-header: #1f1f1f;
+    --row-hover: #222;
+    --input-bg: #2a2a2a;
+    --input-border: #444;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background-color: #1e1e1e;
+    padding: 1rem 2rem;
+    color: var(--primary-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+main {
+    flex: 1;
+    padding: 2rem;
+    max-width: 900px;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+    font-size: 2rem;
+}
+
+.ranking-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    align-items: center;
+}
+
+.ranking-controls label {
+    font-weight: bold;
+}
+
+.ranking-controls select {
+    padding: 0.4rem 0.8rem;
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 5px;
+    color: var(--text-color);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+th, td {
+    padding: 1rem;
+    text-align: center;
+}
+
+thead {
+    background-color: var(--table-header);
+    color: var(--primary-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #181818;
+}
+
+tbody tr:hover {
+    background-color: var(--row-hover);
+    transition: background-color 0.3s;
+}
+
+@media (max-width: 768px) {
+    .ranking-controls {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    th, td {
+        font-size: 0.9rem;
+        padding: 0.7rem;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+}
+
+</style>
+<body>
+    <header>
+        <!-- Mismo header que game.html -->
+    </header>
+
+    <main>
+        <h1>Top Ranking</h1>
+        <div class="ranking-controls">
+            <label for="ranking-size">Mostrar:</label>
+            <select id="ranking-size">
+                <option value="10">Top 10</option>
+                <option value="20">Top 20</option>
+                <option value="30">Top 30</option>
+            </select>
+            
+            <label for="sort-by">Ordenar per:</label>
+            <select id="sort-by">
+                <option value="position">Posició</option>
+                <option value="name">Nom</option>
+                <option value="points">Punts</option>
+            </select>
+        </div>
+        
+        <table id="ranking-table">
+            <thead>
+                <tr>
+                    <th>Posició</th>
+                    <th>Nom</th>
+                    <th>Punts</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Datos se llenarán con JavaScript -->
+            </tbody>
+        </table>
+    </main>
+
+    <script src="js/auth.js"></script>
+    <script src="js/user.js"></script>
+    <script src="js/game.js"></script>
+    <script>
+        // Función para guardar los datos del usuario en el ranking
+        function saveUserScore(points) {
+            const user = JSON.parse(localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser'));
+            if (!user) return;
+            
+            // Obtener el ranking actual o crear uno nuevo
+            let ranking = JSON.parse(localStorage.getItem('ranking')) || [];
+            
+            // Verificar si el usuario ya está en el ranking
+            const existingUserIndex = ranking.findIndex(item => item.id === user.id);
+            
+            if (existingUserIndex !== -1) {
+                // Actualizar puntuación si es mayor
+                if (points > ranking[existingUserIndex].points) {
+                    ranking[existingUserIndex].points = points;
+                }
+            } else {
+                // Agregar nuevo usuario al ranking
+                ranking.push({
+                    id: user.id,
+                    name: user.name,
+                    points: points
+                });
+            }
+            
+            // Ordenar el ranking por puntos (mayor a menor)
+            ranking.sort((a, b) => b.points - a.points);
+            
+            // Limitar el ranking a los 30 mejores
+            if (ranking.length > 30) {
+                ranking = ranking.slice(0, 30);
+            }
+            
+            // Guardar en localStorage
+            localStorage.setItem('ranking', JSON.stringify(ranking));
+        }
+
+        // Función para obtener los datos del ranking
+        function getRankingData() {
+            const ranking = JSON.parse(localStorage.getItem('ranking') || '[]');
+            return ranking.map((player, index) => ({
+                position: index + 1,
+                name: player.name,
+                points: player.points
+            }));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = JSON.parse(localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser'));
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Obtener datos del ranking
+            const topPlayers = getRankingData();
+            
+            function updateRanking(size = 10, sortBy = 'position') {
+                let sortedPlayers = [...topPlayers];
+                
+                if (sortBy === 'name') {
+                    sortedPlayers.sort((a, b) => a.name.localeCompare(b.name));
+                } else if (sortBy === 'points') {
+                    sortedPlayers.sort((a, b) => b.points - a.points);
+                }
+                
+                const limitedPlayers = sortedPlayers.slice(0, size);
+                
+                const tableBody = document.querySelector('#ranking-table tbody');
+                tableBody.innerHTML = limitedPlayers.map(player => `
+                    <tr>
+                        <td>${player.position}</td>
+                        <td>${player.name}</td>
+                        <td>${player.points}</td>
+                    </tr>
+                `).join('');
+            }
+            
+            // Inicializar tabla
+            updateRanking();
+            
+            // Manejar cambios en los controles
+            document.getElementById('ranking-size').addEventListener('change', (e) => {
+                const size = parseInt(e.target.value);
+                const sortBy = document.getElementById('sort-by').value;
+                updateRanking(size, sortBy);
+            });
+            
+            document.getElementById('sort-by').addEventListener('change', (e) => {
+                const sortBy = e.target.value;
+                const size = parseInt(document.getElementById('ranking-size').value);
+                updateRanking(size, sortBy);
+            });
+        });
+    </script>
+</body>
+</html>
